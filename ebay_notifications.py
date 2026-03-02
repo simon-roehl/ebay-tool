@@ -1,10 +1,10 @@
 import hashlib
-from config import YOUR_TOKEN_HERE
+import os
 from flask import Flask, request, jsonify
 
 app = Flask(__name__)
 
-VERIFICATION_TOKEN = "YOUR_TOKEN_HERE"
+VERIFICATION_TOKEN = os.getenv("YOUR_TOKEN_HERE")
 ENDPOINT_URL = "https://ebay-tool.onrender.com/ebay-notifications"
 
 @app.route("/ebay-notifications", methods=["GET", "POST"])
