@@ -1,12 +1,11 @@
 import hashlib
 import os
 from flask import Flask, request, jsonify
-from dotenv import load_dotenv
-load_dotenv()
+
 
 app = Flask(__name__)
 
-VERIFICATION_TOKEN = os.getenv("YOUR_TOKEN_HERE")
+VERIFICATION_TOKEN = os.getenv("VERIFICATION_TOKEN")
 ENDPOINT_URL = "https://ebay-tool.onrender.com/ebay-notifications"
 
 @app.route("/ebay-notifications", methods=["GET", "POST"])
@@ -14,7 +13,11 @@ def ebay_notifications():
 
     if request.method == "GET":
         challenge_code = request.args.get("challenge_code")
+        if not challenge_code:
+            return "Missing challenge_code", 400
 
+        if not VERIFICATION_TOKEN:
+            return "Verification token not configured", 500
         hash_input = challenge_code + VERIFICATION_TOKEN + ENDPOINT_URL
         challenge_response = hashlib.sha256(hash_input.encode()).hexdigest()
 
