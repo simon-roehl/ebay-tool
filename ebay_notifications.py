@@ -1,16 +1,26 @@
+import hashlib
+from config import YOUR_TOKEN_HERE
 from flask import Flask, request, jsonify
 
 app = Flask(__name__)
 
-@app.route("/ebay-notifications", methods=["POST"])
+VERIFICATION_TOKEN = "YOUR_TOKEN_HERE"
+ENDPOINT_URL = "https://ebay-tool.onrender.com/ebay-notifications"
+
+@app.route("/ebay-notifications", methods=["GET", "POST"])
 def ebay_notifications():
-    data = request.json
-    print("Received notification:", data)
-    return jsonify({"status": "received"}), 200
 
-@app.route("/")
-def home():
-    return "eBay Notification Endpoint Running"
+    if request.method == "GET":
+        challenge_code = request.args.get("challenge_code")
 
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=10000)
+        hash_input = challenge_code + VERIFICATION_TOKEN + ENDPOINT_URL
+        challenge_response = hashlib.sha256(hash_input.encode()).hexdigest()
+
+        return jsonify({
+            "challengeResponse": challenge_response
+        })
+
+    if request.method == "POST":
+        data = request.json
+        print("Received notification:", data)
+        return "", 200
