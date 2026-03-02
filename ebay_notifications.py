@@ -7,7 +7,7 @@ load_dotenv()
 app = Flask(__name__)
 
 VERIFICATION_TOKEN = os.getenv("YOUR_TOKEN_HERE")
-ENDPOINT_URL = "https://ebay-tool.onrender.com"
+ENDPOINT_URL = "https://ebay-tool.onrender.com/ebay-notifications"
 
 @app.route("/ebay-notifications", methods=["GET", "POST"])
 def ebay_notifications():
