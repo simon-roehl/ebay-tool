@@ -25,7 +25,7 @@ def ebay_notifications():
             "challengeResponse": challenge_response
         })
 
-   if request.method == "POST":
+    if request.method == "POST":
         data = request.json
         print("Received account deletion notification:", data)
     # Future-proof placeholder
